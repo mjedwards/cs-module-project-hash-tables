@@ -22,6 +22,8 @@ class HashTable:
 
     def __init__(self, capacity):
         # Your code here
+        self.capacity = capacity
+        self.buckets = [None] * capacity
 
 
     def get_num_slots(self):
@@ -35,6 +37,7 @@ class HashTable:
         Implement this.
         """
         # Your code here
+        self.size = len([None] * self.capacity)
 
 
     def get_load_factor(self):
@@ -63,6 +66,11 @@ class HashTable:
         Implement this, and/or FNV-1.
         """
         # Your code here
+        hash = key.encode()
+        sum = 0
+        for x in hash:
+            sum+=x
+        return sum % self.capacity
 
 
     def hash_index(self, key):
@@ -82,6 +90,8 @@ class HashTable:
         Implement this.
         """
         # Your code here
+        self.index = self.hash_index(key)
+        self.buckets[self.index] = value
 
 
     def delete(self, key):
@@ -93,6 +103,10 @@ class HashTable:
         Implement this.
         """
         # Your code here
+        index = self.hash_index(key)
+        val = self.buckets[index]
+        new_arr = self.buckets.remove(val)
+        return new_arr
 
 
     def get(self, key):
@@ -104,16 +118,20 @@ class HashTable:
         Implement this.
         """
         # Your code here
+        index = self.hash_index(key)
+        val = self.buckets[index]
+        return val
+       
 
 
-    def resize(self, new_capacity):
-        """
-        Changes the capacity of the hash table and
-        rehashes all key/value pairs.
+    # def resize(self, new_capacity):
+    #     """
+    #     Changes the capacity of the hash table and
+    #     rehashes all key/value pairs.
 
-        Implement this.
-        """
-        # Your code here
+    #     Implement this.
+    #     """
+    #     # Your code here
 
 
 
@@ -133,7 +151,7 @@ if __name__ == "__main__":
     ht.put("line_11", "So rested he by the Tumtum tree")
     ht.put("line_12", "And stood awhile in thought.")
 
-    print("")
+    print("") 
 
     # Test storing beyond capacity
     for i in range(1, 13):
