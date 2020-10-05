@@ -23,7 +23,7 @@ class HashTable:
     def __init__(self, capacity):
         # Your code here
         self.capacity = capacity
-        self.buckets = [None] * capacity
+        self.buckets = [[] for i in range(self.capacity)]
 
 
     def get_num_slots(self):
@@ -47,6 +47,8 @@ class HashTable:
         Implement this.
         """
         # Your code here
+        if self.size > 0:
+            return self.size / self.capacity
 
 
     def fnv1(self, key):
@@ -66,10 +68,9 @@ class HashTable:
         Implement this, and/or FNV-1.
         """
         # Your code here
-        hash = key.encode()
         sum = 0
-        for x in hash:
-            sum+=x
+        for x in key:
+            sum += ord(x)
         return sum % self.capacity
 
 
@@ -90,8 +91,15 @@ class HashTable:
         Implement this.
         """
         # Your code here
-        self.index = self.hash_index(key)
-        self.buckets[self.index] = value
+        h_i = self.djb2(key)
+        located = False
+        for i, element in enumerate(self.buckets[h_i]):
+            if len(element) == 2 and element[0] == key:
+                self.buckets[h_i][i] = (key, value)
+                located = True
+
+        if not located:
+            self.buckets[h_i].append((key, value))
 
 
     def delete(self, key):
@@ -103,10 +111,15 @@ class HashTable:
         Implement this.
         """
         # Your code here
-        index = self.hash_index(key)
-        val = self.buckets[index]
-        new_arr = self.buckets.remove(val)
-        return new_arr
+        h_i = self.djb2(key)
+       
+        for index, element in enumerate(self.buckets[h_i]):
+            if element[0] == key:
+                del self.buckets[h_i][index]
+
+        
+        # new_arr = self.buckets.remove(val)
+        # return new_arr
 
 
     def get(self, key):
@@ -118,21 +131,34 @@ class HashTable:
         Implement this.
         """
         # Your code here
-        index = self.hash_index(key)
-        val = self.buckets[index]
-        return val
+        index = self.djb2(key)
+        for element in self.buckets[index]:
+            if element[0] == key:
+                return element[1]
+            
+
+
        
 
 
-    # def resize(self, new_capacity):
-    #     """
-    #     Changes the capacity of the hash table and
-    #     rehashes all key/value pairs.
+    def resize(self, new_capacity):
+        """
+        Changes the capacity of the hash table and
+        rehashes all key/value pairs.
 
-    #     Implement this.
-    #     """
-    #     # Your code here
-
+        Implement this.
+        """
+        # Your code here
+        if not new_capacity:
+            return
+        re_hash = HashTable(new_capacity)
+        for i in self.buckets:
+            node = i
+            print(node)
+            while node:
+                re_hash.put(key, value) 
+        self.capacity = new_capapcity
+       
 
 
 if __name__ == "__main__":
