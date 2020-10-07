@@ -22,6 +22,8 @@ class HashTable:
 
     def __init__(self, capacity):
         # Your code here
+        self.capacity = capacity
+        self.buckets = [[] for i in range(self.capacity)]
 
 
     def get_num_slots(self):
@@ -35,6 +37,7 @@ class HashTable:
         Implement this.
         """
         # Your code here
+        self.size = len([None] * self.capacity)
 
 
     def get_load_factor(self):
@@ -44,6 +47,8 @@ class HashTable:
         Implement this.
         """
         # Your code here
+        if self.size > 0:
+            return self.size / self.capacity
 
 
     def fnv1(self, key):
@@ -63,6 +68,10 @@ class HashTable:
         Implement this, and/or FNV-1.
         """
         # Your code here
+        sum = 0
+        for x in key:
+            sum += ord(x)
+        return sum % self.capacity
 
 
     def hash_index(self, key):
@@ -82,6 +91,15 @@ class HashTable:
         Implement this.
         """
         # Your code here
+        h_i = self.djb2(key)
+        located = False
+        for i, element in enumerate(self.buckets[h_i]):
+            if len(element) == 2 and element[0] == key:
+                self.buckets[h_i][i] = (key, value)
+                located = True
+
+        if not located:
+            self.buckets[h_i].append((key, value))
 
 
     def delete(self, key):
@@ -93,6 +111,15 @@ class HashTable:
         Implement this.
         """
         # Your code here
+        h_i = self.djb2(key)
+       
+        for index, element in enumerate(self.buckets[h_i]):
+            if element[0] == key:
+                del self.buckets[h_i][index]
+
+        
+        # new_arr = self.buckets.remove(val)
+        # return new_arr
 
 
     def get(self, key):
@@ -104,6 +131,14 @@ class HashTable:
         Implement this.
         """
         # Your code here
+        index = self.djb2(key)
+        for element in self.buckets[index]:
+            if element[0] == key:
+                return element[1]
+            
+
+
+       
 
 
     def resize(self, new_capacity):
@@ -114,7 +149,16 @@ class HashTable:
         Implement this.
         """
         # Your code here
-
+        if not new_capacity:
+            return
+        re_hash = HashTable(new_capacity)
+        for i in self.buckets:
+            node = i
+            print(node)
+            while node:
+                re_hash.put(key, value) 
+        self.capacity = new_capapcity
+       
 
 
 if __name__ == "__main__":
@@ -133,7 +177,7 @@ if __name__ == "__main__":
     ht.put("line_11", "So rested he by the Tumtum tree")
     ht.put("line_12", "And stood awhile in thought.")
 
-    print("")
+    print("") 
 
     # Test storing beyond capacity
     for i in range(1, 13):
