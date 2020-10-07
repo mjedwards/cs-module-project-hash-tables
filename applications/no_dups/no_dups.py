@@ -1,5 +1,21 @@
 def no_dups(s):
     # Your code here
+    stored = {}
+    size = len(s)
+    words = s.split(' ')
+
+    if size < 1:
+        return ""
+
+    for word in words:
+        if stored.get(word):
+            pass
+
+        else:
+            stored[word] = None
+    
+    return ' '.join(stored.keys())
+    
 
 
 

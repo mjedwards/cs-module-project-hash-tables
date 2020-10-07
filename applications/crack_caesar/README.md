@@ -83,7 +83,7 @@ So if you have a large enough block of ciphertext, you can analyze the
 frequency of letters in there. And if `X` is the most frequent, then
 it's a safe bet that the key includes this mapping:
 
-```
+``` 
 E -> X
 ```
 
